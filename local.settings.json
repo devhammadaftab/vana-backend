@@ -1,0 +1,10 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "CosmosDBConnection": "https://golf.documents.azure.com:443/",
+    "CosmosDBKey": "ZNiSCSuOCdl4OX6JIRVmKQisQJBFzKmLupwZEapdJAysNnZu8OjUAnfdvSrTuH85BY9GFuGFEyRJACDbOWAigw==",
+    "CosmosDBCollection": "vana-golf"
+  }
+}
