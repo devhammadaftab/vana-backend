@@ -1,5 +1,5 @@
 const { container } = require('../comos-client');
-const { golfCalculation } = require('../helper');
+const { calculateHandicap } = require('../helper');
 
 module.exports = async function (context, req) {
     const body = req.body;
@@ -11,27 +11,27 @@ module.exports = async function (context, req) {
     const { resource: currentItem } = await container.item(name).read();
 
     if(currentItem) {
+        let scores = [...currentItem.scores, score];
         current = await container.item(name).replace({
             id: name,
-            scores: [...currentItem.scores, score]
+            scores,
+            handicap: calculateHandicap(scores),
+            average: Number((scores.reduce((a, b) => a + b) / scores.length).toFixed(2))
         });
     }
     else {
         current = await container.items.create({
             id: name,
-            scores: [score]
+            scores: [score],
+            handicap: 0,
+            average: 0
         });
     }
     current = current.resource;
-    let numscores = current.scores.length;
+    let scoreCount = current.scores.length;
 
-    current = {
-        ...current,
-        ...golfCalculation(current.scores)
-    }
-
-    if(numscores > 10) {
-        current.scores = current.scores.slice(numscores - 10, numscores);
+    if(scoreCount > 10) {
+        current.scores = current.scores.slice(scoreCount - 10, scoreCount);
     }
     
     context.res = {

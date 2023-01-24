@@ -1,15 +1,17 @@
 const { container } = require("../comos-client");
-const { golfCalculation } = require("../helper");
+const { calculateHandicap } = require("../helper");
 
 module.exports = async function (context, req) {
     const name = req.query.name;
 
     const { resource } = await container.item(name).read();
+    const { scores } = resource;
 
     context.res = {
         body: {
             ...resource,
-            ...golfCalculation(resource.scores)
+            handicap: calculateHandicap(scores),
+            average: Number((scores.reduce((a, b) => a + b) / scores.length).toFixed(2))
         }
     };
 }
